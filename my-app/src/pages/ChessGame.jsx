@@ -88,7 +88,7 @@ const ChessGame = () => {
     if (currentGame.isCheckmate()) {
       if (currentGame.turn() === 'b') { // White wins
         try {
-          const response = await fetch('http://localhost:5000/api/game/win', {
+          const response = await fetch('https://luckychamp-backend.onrender.com/api/game/win', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ const ChessGame = () => {
         }
       } else { // Black wins (player loses)
         try {
-          const response = await fetch('http://localhost:5000/api/game/loss', {
+          const response = await fetch('https://luckychamp-backend.onrender.com/api/game/loss', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
