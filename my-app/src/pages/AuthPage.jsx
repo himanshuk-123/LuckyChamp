@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { FcGoogle } from 'react-icons/fc';
 import { MdOutlinePhone } from 'react-icons/md';
+import axios from 'axios';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -21,21 +22,23 @@ const AuthPage = () => {
     e.preventDefault();
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup';
-      const response = await fetch(`https://luckychamp-backend.onrender.com${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData), 
+      const response = await axios.post(`https://luckychamp-backend.onrender.com${endpoint}`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-      const data = await response.json();
+      const data = response.data; // Axios directly data deta hai, response.json() ki zarurat nahi
       if (data.token) {
         localStorage.setItem('token', data.token); // Store token
         login(data.user); // Update context
         console.log(data.user);
+        navigate('/dashboard'); // Navigate after successful login/signup
       } else {
         setError(data.message);
       }
     } catch (err) {
-      setError('Something went wrong');
+      // Axios error handling
+      setError(err.response?.data?.message || 'Something went wrong');
     }
   };
 

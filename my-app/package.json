@@ -12,6 +12,7 @@
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
     "@tailwindcss/vite": "^4.0.14",
+    "axios": "^1.8.4",
     "chess.js": "^1.1.0",
     "matter-js": "^0.20.0",
     "react": "^19.0.0",
