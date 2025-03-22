@@ -4,6 +4,7 @@ import { AppContext } from '../context/AppContext';
 import { Chessboard } from 'react-chessboard';
 import { Chess } from 'chess.js';
 import { FaArrowLeft, FaCoins, FaChessKing, FaUndo, FaRedo } from 'react-icons/fa';
+import axios from 'axios'
 
 const ChessGame = () => {
   const { balance, updateBalance } = useContext(AppContext); // Added refreshUserData
@@ -88,15 +89,15 @@ const ChessGame = () => {
     if (currentGame.isCheckmate()) {
       if (currentGame.turn() === 'b') { // White wins
         try {
-          const response = await fetch('https://luckychamp-backend.onrender.com/api/game/win', {
-            method: 'POST',
+          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/game/win`, {
+            game: 'chess',
+            amount: 50,
+          }, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
-            body: JSON.stringify({ game: 'chess', amount: 50 }),
           });
-          const data = await response.json();
           if (response.ok) {
             await updateBalance(50); // Update balance and sync with backend
             // await refreshUserData(); // Sync latest user data
@@ -108,15 +109,15 @@ const ChessGame = () => {
         }
       } else { // Black wins (player loses)
         try {
-          const response = await fetch('https://luckychamp-backend.onrender.com/api/game/loss', {
-            method: 'POST',
+          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/game/loss `, {
+            game: 'chess',
+            amount: 50,
+          }, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
-            body: JSON.stringify({ game: 'chess', amount: 20 }),
           });
-          const data = await response.json();
           if (response.ok) {
             await updateBalance(-20); // Update balance and sync with backend
             // await refreshUserData(); // Sync latest user data
