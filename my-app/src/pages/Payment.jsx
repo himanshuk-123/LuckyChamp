@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import { FaArrowLeft, FaCoins } from 'react-icons/fa';
-
+import axios from 'axios';
 const Payment = () => {
   const { balance, updateBalance } = useContext(AppContext);
   const navigate = useNavigate();
@@ -18,11 +18,11 @@ const Payment = () => {
     if (!selectedPack) return;
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/payment`, selectedPack, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  },
+});
       updateBalance(selectedPack.coins);
       alert(`Successfully added ${selectedPack.coins} coins!`);
       navigate('/dashboard');

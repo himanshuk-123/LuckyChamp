@@ -20,6 +20,7 @@ const AuthPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("hello world!");
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup';
       const response = await axios.post(`${process.env.REACT_APP_API_URL}${endpoint}`, formData, {
@@ -43,7 +44,7 @@ const AuthPage = () => {
 
   const logout = () => {
     setUser(null);
-    setBalance(100);
+    //setBalance(100);
     localStorage.removeItem('token');
   };
 

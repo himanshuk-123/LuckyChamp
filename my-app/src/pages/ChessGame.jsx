@@ -109,7 +109,7 @@ const ChessGame = () => {
         }
       } else { // Black wins (player loses)
         try {
-          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/game/loss `, {
+          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/game/loss`, {
             game: 'chess',
             amount: 50,
           }, {
