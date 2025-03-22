@@ -3,3 +3,4 @@ backend/node_modules/
 
 my-app/.env
 backend/.env
+my-app/.env.development

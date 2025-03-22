@@ -22,22 +22,21 @@ const AuthPage = () => {
     e.preventDefault();
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup';
-      const response = await axios.post(`https://luckychamp-backend.onrender.com${endpoint}`, formData, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}${endpoint}`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      const data = response.data; // Axios directly data deta hai, response.json() ki zarurat nahi
+      const data = response.data;
       if (data.token) {
-        localStorage.setItem('token', data.token); // Store token
-        login(data.user); // Update context
+        localStorage.setItem('token', data.token);
+        login(data.user);
         console.log(data.user);
-        navigate('/dashboard'); // Navigate after successful login/signup
+        navigate('/dashboard');
       } else {
         setError(data.message);
       }
     } catch (err) {
-      // Axios error handling
       setError(err.response?.data?.message || 'Something went wrong');
     }
   };

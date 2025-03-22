@@ -17,15 +17,12 @@ const Payment = () => {
   const handlePayment = async () => {
     if (!selectedPack) return;
     try {
-      const response = await fetch('https://luckychamp-backend.onrender.com/api/payment', {
-        method: 'POST',
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/payment`, selectedPack, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(selectedPack),
       });
-      const data = await response.json();
       updateBalance(selectedPack.coins);
       alert(`Successfully added ${selectedPack.coins} coins!`);
       navigate('/dashboard');
