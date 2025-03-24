@@ -89,7 +89,7 @@ const ChessGame = () => {
     if (currentGame.isCheckmate()) {
       if (currentGame.turn() === 'b') { // White wins
         try {
-          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/game/win`, {
+          const response = await axios.post(`https://luckychamp-backend.onrender.com/api/game/win`, {
             game: 'chess',
             amount: 50,
           }, {
@@ -98,14 +98,14 @@ const ChessGame = () => {
               'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
           });
-          if (response.ok) {
-            await updateBalance(50); // Update balance and sync with backend
-            // await refreshUserData(); // Sync latest user data
+          if (response.status === 200) { // response.ok ki jagah status check
+            await updateBalance(50);
+            console.log('Win recorded:', response.data);
           } else {
-            console.error('Win update failed:', data.message);
+            console.error('Win update failed:', response.data.message);
           }
         } catch (err) {
-          console.error('Win update failed:', err);
+          console.error('Win update failed:', err.response?.data?.message || err.message);
         }
       } else { // Black wins (player loses)
         try {
@@ -118,14 +118,14 @@ const ChessGame = () => {
               'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
           });
-          if (response.ok) {
-            await updateBalance(-20); // Update balance and sync with backend
-            // await refreshUserData(); // Sync latest user data
+          if (response.status === 200) {
+            await updateBalance(-20);
+            console.log('Loss recorded:', response.data);
           } else {
-            console.error('Loss update failed:', data.message);
+            console.error('Loss update failed:', response.data.message);
           }
         } catch (err) {
-          console.error('Loss update failed:', err);
+          console.error('Loss update failed:', err.response?.data?.message || err.message);
         }
       }
     }
@@ -133,8 +133,10 @@ const ChessGame = () => {
 
   const startGame = async () => {
     if (balance < 10 || gameStarted) return;
+    console.log("Checks the log message!..");
     await updateBalance(-10); // Deduct 10 coins and sync with backend
     // await refreshUserData(); // Sync latest user data
+    console.log("Balance: ",balance);
     setGameStarted(true);
   };
 

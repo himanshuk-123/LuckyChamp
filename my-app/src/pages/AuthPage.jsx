@@ -21,33 +21,36 @@ const AuthPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("hello world!");
+      // console.log('API URL:', process.env.REACT_APP_API_URL);
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup';
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}${endpoint}`, formData, {
+      // console.log('Full URL:', `https://luckychamp-backend.onrender.com${endpoint}`); // Full URL print karo
+      const response = await axios.post(`https://luckychamp-backend.onrender.com${endpoint}`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       const data = response.data;
       if (data.token) {
+        localStorage.clear();
         localStorage.setItem('token', data.token);
         login(data.user);
-        console.log(data.user);
-        navigate('/dashboard');
+
+        console.log('Stored Token:', localStorage.getItem('token'));
+        navigate('/dashboard'); 
       } else {
         setError(data.message);
       }
     } catch (err) {
+      console.error('Request failed:', err);  
       setError(err.response?.data?.message || 'Something went wrong');
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    //setBalance(100);
-    localStorage.removeItem('token');
+  const logoutHandler = () => { // Rename kiya clarity ke liye
+    logout(); // AppContext ka logout use karo
+    navigate('/');
   };
-
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 dark:text-white">
       <div className="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border-2 border-yellow-500/30">

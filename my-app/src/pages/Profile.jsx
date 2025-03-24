@@ -2,17 +2,33 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { FaArrowLeft, FaCoins, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
+import axios from 'axios';
 
 const Profile = () => {
-  const { balance, user, logout } = useAppContext();
+  const { balance, user, login, logout } = useAppContext();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const fetchProfile = async () => {
-  //     await refreshUserData(); // Fetch and sync latest data
-  //   };
-  //   fetchProfile();
-  // }, [refreshUserData]);
+  const fetchProfile = async () => {
+    try {
+      const response = await axios.get(`https://luckychamp-backend.onrender.com/api/profile`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (response.status === 200) {
+        login(response.data); // Context mein latest user data set karo
+      }
+    } catch (err) {
+      console.error('Profile fetch failed:', err.response?.data?.message || err.message);
+      logout();
+      navigate('/');
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+    console.log(user); // Page load pe latest data fetch karo
+  }, []);
 
   const handleLogout = () => {
     logout();

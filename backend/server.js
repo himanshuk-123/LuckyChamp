@@ -10,7 +10,7 @@ const gameRoutes = require('./routes/game');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: 'https://luckychamp-frontend.onrender.com' }));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
@@ -21,6 +21,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/game', gameRoutes);
+app.get('/', (req, res) => res.send('Himanshu kasoudhan'));
 
 const PORT = process.env.PORT || 5000;  
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

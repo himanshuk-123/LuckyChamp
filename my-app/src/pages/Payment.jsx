@@ -13,21 +13,25 @@ const Payment = () => {
     { coins: 100, price: 90 },
     { coins: 200, price: 170 },
   ];
-
   const handlePayment = async () => {
     if (!selectedPack) return;
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/payment`, selectedPack, {
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-  },
-});
-      updateBalance(selectedPack.coins);
-      alert(`Successfully added ${selectedPack.coins} coins!`);
-      navigate('/dashboard');
+      const response = await axios.post(`https://luckychamp-backend.onrender.com/api/payment`, selectedPack, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (response.status === 200) {
+        updateBalance(selectedPack.coins);
+        alert(`Successfully added ${selectedPack.coins} coins!`);
+        navigate('/dashboard');
+      } else {
+        alert('Payment failed: ' + response.data.message);
+      }
     } catch (err) {
-      alert('Payment failed');
+      alert('Payment failed: ' + (err.response?.data?.message || 'Something went wrong'));
+      console.error('Payment error:', err);
     }
   };
 
