@@ -10,7 +10,7 @@ const gameRoutes = require('./routes/game');
 
 const app = express();
 
-app.use(cors({ origin: 'https://luckychamp-frontend.onrender.com' }));
+app.use(cors({ origin: 'https://luckychamp.onrender.com' }));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
