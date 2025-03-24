@@ -99,7 +99,7 @@ const ChessGame = () => {
             },
           });
           if (response.status === 200) { // response.ok ki jagah status check
-            await updateBalance(50);
+            await updateBalance(50,win);
             console.log('Win recorded:', response.data);
           } else {
             console.error('Win update failed:', response.data.message);
@@ -109,7 +109,7 @@ const ChessGame = () => {
         }
       } else { // Black wins (player loses)
         try {
-          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/game/loss`, {
+          const response = await axios.post(`https://luckychamp-backend.onrender.com/api/game/loss`, {
             game: 'chess',
             amount: 50,
           }, {
@@ -119,7 +119,7 @@ const ChessGame = () => {
             },
           });
           if (response.status === 200) {
-            await updateBalance(-20);
+            await updateBalance(-20,loss);
             console.log('Loss recorded:', response.data);
           } else {
             console.error('Loss update failed:', response.data.message);
